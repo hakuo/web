@@ -1,0 +1,14 @@
+<tr>
+  <td id=mic-name{index}>MICNAME</td>
+  <td id=mic-ip{index}>MICIP</td>
+  <td id=mic-port{index}>MICPORT</td>
+  <td style="display:none;" id=mic-username{index}>MICUSER</td>
+  <td style="display:none;" id=mic-password{index}>MICPASS</td>
+  <td id=mic-macaddr{index}>MICMAC</td>
+  <!-- <td style="display:none;" id=mic-id{index}>CAMID</td> -->
+  <td style="display:none;" id=mic-index{index}>MICINDEX</td>
+  <td>
+    <input id="edit-mic-button{index}" class="sub float right positive" value="Edit" type="submit" onclick="onEditMic(this,{index})">
+    <input id="delete-mic-button{index}" class="sub float right negative" value="Delete" type="submit" onclick="onRemoveRow(this,{index})">
+  </td>
+</tr>

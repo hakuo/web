@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>HOMA Voice Service Configuration</title>
+      <style>
+         * {
+           box-sizing: border-box;
+         }
+
+         body {
+           font-family: Tahoma, Helvetica, sans-serif;
+           background-color: lightblue;
+         }
+
+         input[type=text],
+         input[type=password],
+         input[type=number] {
+           width: 100%;
+           padding: 12px;
+           border: 1px solid #ccc;
+           border-radius: 4px;
+           resize: vertical;
+         }
+
+          input:invalid {
+              border-color: red;
+          }
+
+          input:valid {
+              border-color: #ccc;
+          }
+          
+
+         input:focus {
+           box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+         }
+
+         label {
+           padding: 12px 12px 12px 0;
+           display: inline-block;
+         }
+
+         input[type=submit] {
+           background-color: #4CAF50;
+           color: white;
+           padding: 12px 20px;
+           border: none;
+           border-radius: 4px;
+           cursor: pointer;
+           float: left;
+           margin: 0 10px;
+         }
+
+         input[type=submit]:hover {
+           background-color: #45a049;
+         }
+
+         input[type=submit].negative1 {
+            background-color: rgb(0, 0, 0) !important;
+         }
+
+         input[type=submit].negative {
+            background-color: rgb(204, 34, 4) !important;
+         }
+         input[type=submit].negative:hover {
+            background-color: lightsalmon !important;
+         }
+         input[type=submit].float.right {
+            float: right;
+         }
+         input[type=submit].float.left {
+            float: left;
+         }
+
+         .container {
+           border-radius: 0 5px 5px 5px;
+           background-color: white;/*#f2f2f2;*/
+           padding: 20px;
+           -webkit-animation: fadeEffect 1s;
+           animation: fadeEffect 1s;
+         }
+
+         .nvr-add-new-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width:100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+         }
+
+         .nvr-add-new-container-sub {
+            position:fixed;
+            background: white;
+            width: 600px;
+            height: auto;
+            top:50%;
+            left:50%;
+            border-radius: 3px;
+            padding: 20px;
+            transform: translate(-50%,-50%);
+            -webkit-animation: fadeEffect 1s;
+            animation: fadeEffect 1s;
+         }
+
+         @-webkit-keyframes fadeEffect {
+            from {opacity: 0;}
+            to {opacity: 1;}
+         }
+
+         @keyframes fadeEffect {
+            from {opacity: 0;}
+            to {opacity: 1;}
+         }
+
+         .login.container {
+           border-radius: 5px;
+           background-color: #F2f2f2;
+           /*padding: 20px;*/
+           width: 800px;
+           position: relative;
+         }
+
+         .center {
+           margin: auto;
+           width: 100%;
+           padding: 10px;
+         }
+
+         .middle {
+           margin: 0;
+           position: absolute;
+           top: 50%;
+           -ms-transform: translateY(-50%);
+           transform: translateY(-50%);
+         }
+
+         .center_middle {
+           margin: 0;
+           position: absolute;
+           top: 50%;
+           left: 50%;
+           -ms-transform: translate(-50%, -50%);
+           transform: translate(-50%, -50%);
+         }
+
+         .clearfix {
+           overflow: auto;
+         }
+
+         .col15 {
+           float: left;
+           width: 10%;
+           margin-top: 6px;
+         }
+
+         .col50 {
+            width: 50%;
+            margin-top: 6px;
+            
+         }
+         .col50 > div {
+            padding: 5px;
+         }
+         .col50.float.left {
+            float: left;
+         }
+         .col50.float.right {
+            float: right;
+         }
+
+         .col85 {
+           float: left;
+           width: 90%;
+           margin-top: 6px;
+         }
+
+         .colop {
+           float: left;
+           width: 90%;
+           margin-top: 24px;
+         }
+
+         .row {
+            width: 100%;
+         }
+         .row:after {
+           content: "";
+           display: table;
+           clear: both;
+         }
+
+         .row.title {
+           font-size: 24pt;
+           font-weight: bold;
+           padding: 10px 0;
+         }
+
+         .row .sub {
+           margin-top: 20px;
+         }
+
+         .row .sub.float_left {
+           float: left;
+         }
+
+         .row .sub.float_right {
+           float: right;
+         }
+
+         .logo {
+           text-align: center;
+           margin: 24px 0 12px 0;
+           float: center;
+           width: 100%;
+         }
+
+         .field-icon {
+           float: right;
+           margin-right: 10px;
+           margin-top: -28px;
+           position: relative;
+           z-index: 2;
+         }
+
+         .pass_show{position: relative} 
+
+          .pass_show .ptxt { 
+
+            position: absolute; 
+
+            top: 50%; 
+
+            right: 10px; 
+
+            z-index: 1; 
+
+            color: #f36c01; 
+
+            margin-top: -10px; 
+
+            cursor: pointer; 
+
+            transition: .3s ease all; 
+
+          } 
+
+          .pass_show .ptxt:hover{color: #333333;} 
+
+         .tb-mics-list {
+            /* border: 1px solid black; */
+            border-collapse: collapse;
+            border-radius: 4px;
+            table-layout: auto;
+            width: 100%;
+         }
+
+         .tb-mics-list th,
+         .tb-mics-list td {
+            /* border: 1px solid #ddd; */
+            border: none;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 5px;
+            text-align: center;
+         }
+         .tb-mics-list tr:nth-child(even){background-color: #f2f2f2;}
+         /* .tb-mics-list tr:hover {background-color: #ddd;} */
+         .tb-mics-list th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #020202;
+            color: white;
+            text-align: center;
+         }
+         .tb-col-name {
+            width: 20%;
+         }
+         .tb-col-ip {
+            width: 20%;
+         }
+         .tb-col-port {
+            width: 20%;
+         }
+         .tb-col-other {
+            width: 40%;
+         }
+
+         .wrap {
+         margin: 0 auto;
+         }
+         ul.tabs {
+            width: 390px;
+            height: 80px;
+            margin: 0;
+            list-style: none;
+            overflow: hidden;
+         padding: 0;
+         }
+         ul.tabs li { 
+            float: left;
+            width: 130px; 
+         }
+         ul.tabs li a {
+            /* position: relative; */
+            display: block;
+            height: 60px;
+            margin-top: 40px;
+            padding: 10px 0 0 0;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 18px;
+            text-align: center; 
+            text-decoration: none;
+            color: #ffffff;
+            background: #6edeef;
+            -webkit-box-shadow: 8px 12px 25px 2px rgba(0,0,0,0.4);
+               -moz-box-shadow: 8px 12px 25px 2px rgba(0,0,0,0.4);
+                  box-shadow: 8px 12px 25px 2px rgba(0,0,0,0.4);
+                     border: 0px solid #000000;
+            -webkit-transition: padding 0.2s ease, margin 0.2s ease;
+               -moz-transition: padding 0.2s ease, margin 0.2s ease;
+                  -o-transition: padding 0.2s ease, margin 0.2s ease;
+               -ms-transition: padding 0.2s ease, margin 0.2s ease;
+                     transition: padding 0.2s ease, margin 0.2s ease;
+         }
+         .tabs li:first-child a {
+            z-index: 3;
+         -webkit-border-top-left-radius: 8px;
+         -moz-border-radius-topleft: 8px;
+         border-top-left-radius: 8px;
+         }
+         .tabs li:nth-child(2) a {
+            z-index: 2;
+         }
+         .tabs li:last-child a {
+            z-index: 1;
+         -webkit-box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.3);
+               -moz-box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.3);
+                  box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.3);
+         -webkit-border-top-right-radius: 8px;
+         -moz-border-radius-topright: 8px;
+         border-top-right-radius: 8px;
+         }
+         ul.tabs li a:hover {
+            margin: 35px 0 0 0;
+            padding: 10px 0 5px 0;
+         }
+         ul.tabs li a.active {
+            margin: 30px 0 0 0;
+            /* padding: 10px 0 10px 0; */
+            background: white;/*#545f60;*/
+            color:teal; /*#6edeef;*/
+            /*color: #ff6831;*/
+            z-index: 4;
+            outline: none;
+         }
+         .group:before,
+         .group:after {
+            content: " "; /* 1 */
+            display: table; /* 2 */
+         }
+         .group:after {
+            clear: both;
+         }
+
+         @media screen and (max-width: 800px) {
+           .container,
+           .login.container,
+           .col15,
+           .col85,
+           .center_middle,
+           input[type=submit] {
+             width: 100%;
+             margin-top: 0;
+           }
+         }
+      </style>
+   <body>
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUIAAAB7CAYAAAABr4lNAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyFpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpFNjY3MUYwRkQwNjIxMUU3QTcyOEQ3MzI4Q0U1OTA5MiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpFNjY3MUYxMEQwNjIxMUU3QTcyOEQ3MzI4Q0U1OTA5MiI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkU2NjcxRjBERDA2MjExRTdBNzI4RDczMjhDRTU5MDkyIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOkU2NjcxRjBFRDA2MjExRTdBNzI4RDczMjhDRTU5MDkyIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+XQdytQAAJ55JREFUeNrsXQmcFMW9rqruOXb2YJcjAsq1eDyNPJQVNeLNcqjBaJ7rmWjwES4JCkEWNUYNgiweBA+EDTGeUeH3fCpKOBYVBUUOgWg08cHCigFBZIFlr5nuqlfdUzXTO3TPzuwcO7v7//g11dNnVW3V19//XxdmjCEAAADoyCCQBQAAAIgQAAAAgAgBAAAAiBAAAACACAEAAACIEAAAAIAIAQAAAIgQAAAAgAgBAAAAiBAAAAA6KNTmLsAYpzVC/V7eoWKEyxjGtyoEd+HhMR6FV3bc0HdCJmTYya9XTUWI3c8YykOM1fLtHb4/qfKWwkNt7Y8PwysBAMFzzVWGdBFh3+e/zuNve4Zr1KsVl5qHCEEEWyssnrnjhj6/b83MOmVJ1ZU8Ku/wLAllCqUMMU2v45H8iJ8bt+vWk6uACAEAIML4CHDxP/twWnkWE3wJcbt8SCHIeCUzuAaHbXcezV2cCAtbmQjf4cFVIRI0I2ZEk5OhQYgBLaDr9DMe7Qm7R5+2FYgQAGgnpnHKTOBF/ziL18MFvDYWEY/LTTgBUs6AJEh6nAw5sbAgGQrkZkB+FTRlkiZfDIRcqktR2Hm0MbC5z5++/JIwXLpr7OnLoZgBAECETQnw6b8P50rkcU52p+Mst4KFAqSmPEVW4guprkxu0THVIAtGmwUPIMWjEkaVMzkhvtN3wee7+dGHd08c8BwUNwCggxNhr3lbb1MYu5+LvEKU7cWYENPsNsiPSv4zCJGzCuHHHVRhxoBG/uYRNtJixJtbyZy8edo8LoxUtR9r8P+575PbHuZM+azO2Kw9d51NoegBAB2ICLvP3XSvgtAkrOAeyOdFSBCg9E8FeQ4HlZXQWHakk3FcyI5Xg9YU6HyfMJE+rwsxt9oDNfj/gOsb7zrpsc2v8jRN2zvtnAYoggBAOyXCrrM+4YyHHuUccLPiVjurPo9JfhQFm1sNEpSNMFgQiSS74L7lPBKqsC2oQZE2IsmRsdBmpsXjQsSldkaN/jv02sZbfzR7wwouf8cfmHHeISiKAEA7IcJuD67rHGB0ga7RK725WbmuLLfZiGCSgbBwsXCkWRujTeKLUIVBIkGh6zKqfdNGDVp/h9QgsvgOUdBkNn+5VOTqpOYSf6CksaZ+VOeH1q0jhIw/eP8FO6FIAgBtlAh73re2X4DScqrTIb5Oviw3Vz5GJ0AmmQFhQR5C+WGhCuUDInyFkaowk9WgVLXUQQ2GyN9UjUGylGyqqgpy5Wd7tYBeXH+k9quC363d5sJ48oGZF2+AogkAtBEiPGn6mrMopQsZpYOy8rNdxCBAQwEK4cOscgg5q0Ljt87/I46qkCGWKV7CCDVoNu44qEFpNiORjmCmSBsahY4rCkE5+TkuqumD/Udq158wfc2/FIJL9865fBkUUQAgQ4mwx9RVPqzRt7jCudTVNU/FXNkwYmkAYcEuL9JvFosqbNKCjKXKyixVyFqgBpGDGgwRovmM4A7heejNzyZIo6drh2vfPGnKys85S4769rHiPVBUAYDUIe4uet0m/22kXu/fpxZkFytdOAkarcAo3OhhPjTUcGAJWZAgqNR7ooEBWwhFR2HywJYW2EwaABGpBs14RqQDWdQgQ0HfIEWsyYdCNqwgQZBWMxpzQnRzQlQ65w2k/sC/ut+18jdQVAGADCHCLhPf+S31a8vcPTvnmS2gIaUjKzQLsRYW5+Q1GIUrOrEwG7W0rMrzQcJsSiqZiLBfMxhRSXZNSE3kQUgLsqYfARxSjiIvxb4REhdBnhMKsvjz5ne9492XoLgCAK1MhPnj3p5MA3qZp2dnVVqrVKo1hpqoQiZVjlBDdqqQsuNNTTtVSFnGeAfDPksU9v0h0YEaM2c1iKyKWRyPVIORJGncaHbO5je5u+VhpJBfFIxf9gIUWQCglYiw09i3z9YbAo9xElRkhaVWpWejCq1qRyqjSFVoVUZtURUGm3BYqJXbTg2aZB46Z68GMQrmh1UNynyVhOrumoeYTn/Rafyy26DYAgCtQISs3v+/ru75LoqlvytYYalF6WEHVSjJMZoqpBbT0UkVZgTxsbDawyw2NYiZvRrEofw7niRDalDkgZTOru4FRK/3P5U3bpkKRRcASCMR5t7+5kjkVvsgjyvcIVhUXKsqlBXcavbZqUIr4UVThQhlpirESVKDpg+QRVGDMp/Fh8DMa4IRyc3KZZo+E4ouAJBGImR+7T6Unx2SQ5TZq0LjII6s7DaqEFmILpoqDJGfbEHOEFWYiBpEFpOXNdks+SZCmc8opEKDea528iEU0G+BogsAJA/Nm1g6PcOcNIDJzsMoJGkMSjOOqeKYSXHmcDocbCkNjY8T+0JRMtnTGmNBDMEHyL6F5lWWyRjkGOVMU4Nm9iAW+ppY+w0ioQat/QUZChMbsfQhlFONMetFEWoQSX+h0WEd4+5QdAGANCpCRHBuk8qIwi2hKIoqlL5Aad7aqUKpmKKpQosqOpYBavDocWrQYtI7qUGpAq3djSLVILN0N3JSg6Fmdpfiyp66sjcUXwAgXaYxwS5qGQ5mVSfUSmwWX2GoH5wgvJD6sfjPrI0mkiiOIxbZyhyUYp9mQH4tkxPhyOF02CZtkb5BFtHBnLDwmGqrkgyej1SDFoUoP0gKMX6eAMUXAEgTEeKAXo38AeSoCi0+QxxFFTIbsoxVFXJTsJbfPzEDTOOFGOMDDDFHNWiNt5MaRJb7UDNqECHLMSN/NE6/tQ0N/PodUHwBgHQpwiz3QLT/yHestjGKKgyrmLCb63hVGHKfha1qR1UYukbBtfzYVZU39Wv1Oft23NjXiOo5hJCDOkbHqcGwGeusBnHkcDobNRj0L8oGkzBZ6g1+RL87XIO87qG1fxxZDcUXAEgTES67+8E7sNfVi9XULacHj+pSutmqQkuXmKAysleFdsPuIlUhN0EbeOzW8AOn7by539pMybCdN/Xdw+PUhxC8hNvsNU0UYyhtx6tBeT7Un9BGDSJmHa3DwmqQH2RHahmtPraNeV2935zy4InvfTkwPw3JZTbb6hS8Z7XDu1KFIr6V8m2RePfmKGldLa4dy7dUr6JY7BAPuaXy/YXNvLs4DeVtdZT3l6byxbF0zC19c+qDXYrP2HZV7vhlQ+mBwy8pub4eKNcr1hgRjCpbks2WXywbhUOqkInZZZjlOrspuvj/xwjGK/ipCZW/OPlgJn49ODHX8eCGwpd2ermp/Bgn7pt45DtT2kTeNZlqC1u6EoU7i6OmqlFcbFWDmKtAdKTuMCP47mN/vnbxqn+cPY2fLuNbN/iOx4USUZmNsCAOYkIRJFDJt3K+LRX7yURz8TLIYFyK8qc5ojE+HhUp/ghEI9uxoty3jiIUpt8YXgH3LJ30wA9HFl/TEzUGHkUHa46xRq2JdohUhcziU4xBFXLTFz9rVPBdvzq1ZPetpxzM9JpV+cv+DZW3njyJx78b3+7nmbk3Ug3aTa7QZDgiihhOJ9WgpiFSXduAahtfQy61x6sTf//u374YZKyV/CjGjACvxQyjAhkzfy8R+wUJPs9QTnPEMxclWaUVxpCWVKjCQvHs1kRpa8ax2QXe3//qLBbsL4iRzrDGSW05V3y33PqnWUhl9CWmKlfgnCyP4lZNVagYfQiNuQkxMWUiNvdxcMZqQxUa/eCMC83+cOY8hPv4uUX8pplVY89o86u79S7/8naeWfdyMis0pTEVrgLKQq3roX0aXBg+1CLMJaWmM6TV1GucCDcSQm5c/Kv7/s2Jbz7G9NcqRh5iztFoTgbb5fIztifkN41hgXe7CwxVMCwFJlGx/Tc4IfN3kQidUCG2aht1VyhIszmlYmBGktRKqSDZaChPgSpcFAPJJCuNTiQXuUzFFpu/nfE36t/qRBj032GkMVxLGXmRn5g85sXZ3XiNeoUT4hCXz+NWXYq5HKciCC9EeiI05i8UqzftYgp+pGrSwMXtUYb0XvD5SE50czm7/dj4DJgWs+nsE/MXmvsi5GTo1ymqr2ukOKB/wbPotu/nFm97c/vg6Tzb7lEwzVcJDXW5ASJMiFAqRYVeKggwVpO1RDzXSZFtEfmSSCPWEvEeK8ps1FL/JJrldiRUbkOMqfi7RyPiYQ6Ke5yIX/pN4yYlk1dCFbNsgtkEzmb7y2+9d/LC235XzNXeqbwif1BT29Co6Wa7adMpunh9x5quo4D2BT8xavedZ/VvryRo4JuJA1ZUTfrP/zRamZFGP+ZSz48ihtEZBKhzBVjT4Ndq6xo/44eG/PBY8cCFt9x76Rvbz/2Ok2AZJ8B8JdMnZswsLHIgwWqhavqLihQPYVWLe/qLZ1Q7KNDNCZredvcubYEZGW9+RaZ1aRr/XnYmb6Ug3vIUp73lRBi6kVdOF9E783AGtwC/f/ame+5cdNO9w7ga7FPb4F9RU+9vpFQ3VZDm1wI0oG3gpHDe7mnnDNg9ZdC7HaVWVt151tbdUwcN4bunEk1fwfOhjvEPheEPbGj0B+oa/Rv5ucGHH7msaOH1M4a8vvX87/gfZZ6b6CcoGNaBjxNzHEw8qdaSYdqViWdVOlTq1QmQYYFD3CtT5Cu0M/vL4ohbqnyD5VE+AoU2qjn9pnHQlx9cozjc2olRgBLUSEkNYvgtfmzi1GWPqhjjuXzzqSq5+5t7zt8L9RShPmUb8zgRztQp7cMomjL3qt/u4Yp5Ns/C0W5Cu/LN/Mhgy6ga6RcE0zgqSoRpaafm+idosjopGScF2FI/HnPIAztTPxm+Qrt8728h9GS5KuIxyyNNf7s4Jr0MJo0I5XmdE2K9Tur4+Q+ML9etRR//G+jveDy/+YIcHjzNie6aLEI7GQSIBNkBEcZd8QpEhbIjpXOEqkoFpDlsh2Eo/u4mzMZE7C/SdagZwmiJGlztQK5OBJVsIpxjowgNFXh9M/Fsaf4m3zR2guHPylZ1n5fQK3k9q3xu0wXrnts0pAioL4jFm4b0WrxxyDL+odjvUehtOYreyUXABE4QTt1iylJIgtJsLYvD5GuOVJENEUpVW+6Q7lSYpJVpMI8LHOJfbvPhrUxC/qaXCCMI0Z2tUsM/tnHRxgu/Lt845JcdtaYu3Hjh0Gc/vXAL/zjs9Kn0p7mq5nNBI0iyKpRTpShLw/vLHMzuYhS96068JLM0jg9ALGrQztxs7qORTEFjF/cKB5VXFmMaMo8IQy/glT1H1UmeSztFwejFpzdcdOCZTy96bMGnF7k7Qi19asNFU57ccFEVtykq8lR9UK5Ld6lAgMlEMXL206VjPHa0VtZkDkuzI6qCFqrC0lb6aDT38XKKQ7mDKkxaB+u0jVAwnAs+RUed3Vo3D6G/DTB8aN4nF789/5OLe7W3msnTlff4xxcvfuKTi6u56nuCp7l3rqqbHwVA0lEUxWxNFyqSQIRFDiQbzWyUpBaPKnRSg7H425I1qsVODVY2Ewc7kixJVpxaZRGgLIUiL6HZDZSMOhpQrihbf8k/FcIemPaTD99oyzVy7seXnK8z/ESAskFc/Xm4CRxq9GhHKETJ78uVSGHOBCLckiLi2GJDhJGduqUqjFXRLYrR7LYb2ZEsH+HYFihSu7TLD0HCI21adTU0N2Goi1tTNYbPPKwp/zNz3aUHFYRewpjde8+QtQ1tgRVmrbuUcKabGqB4MmP0pM4uDXvEKJB2CjnWFhRhUzWTKBHGem25Tf6XxugKsOt/WOmgNFPlVognDrGkXX4EEhppkxGD942GFU4gqIcn0NWr0Cn1lBx+4KPL3uPEeGamssFDH13W4/cfXrakjpKjKmaP8rj36urWMDSApB0F7SQd8RBhtU0exOIvS9Q3mAwzNJE4OJF9whZKRs1iYqgoblKiXl6/p0DVL/NTvH3G2qFVv/vw8ql8y4i43rP28humfzD0ywaKv8lVaUlvrz/bIHEYBgdIgara4vDMshaQQXGcSqw6BUSYiBqMlvaER9pk7HROPoWiE70BcqLH35uTzOM1Oqn57QdD356+9vJT0x2XaR8M7Trlg6HP3fFe8RH+8zWu/k7nBKgaDSAdEBUovORKsrZEOsYmwyzNBPM8noaVcgdlPDaJSiwVroXSGNPSElWY0LC7jJ/XzuhqcoJbQ6f4Gn2dVH0UN0W/mrBmWOXkD4bekep3T3q/+Jqx7xVvP6KTfTkKHX1qVmPeiZ4A8hBQfxmELXGSUzqJsDJF73PqYF0aJX7FCSixZOSpUwuv4fNjcWyHHNwh8baeN+WZtlLaDdnAzWWUr1JSp+N+e/3q07euHvaom6B33YRNW3BZRVUy3jP+veL8AMNz6im+wc9Y/onuAMrn6hRj1J4bQNo6EZY4KKx0zaKSqCIsbMH9ZTYKsFCku8LGdIzEjBakMxF/bKonfo239bxtKUI7ZHFFVugNoAE+f1YnhV73g0Yqb1o9/Ovb1wwb3dJn/mrNsJE3rh6++YCmfJ9F6Dj+7Pz/8PpRngLD3zIcS6MokHQ0pDiZpPFMZ1UYRflFcwnEMuzOLn4VMcQtmaZxUkeBNGN6t+hv3qanfFe4ROvJzebB2Y2knydwSiPDz121ckTt9auHv/KLimE9mrv/lorhOfzaeVesGHmoRsd/O9GlFZ2f06D29WjIDY0fbQVOHXFbOuqiJZXPiaBTPbKlPAYTtCV99pojtWTk0RaUmF95XDL/5u1m7YsClaKBWY3ovGy/L5uwm/cGlG+vXjViJVd5Prvrf7pyxJ/3+JVqTqZ3FfkaCwZn+9EJLh3M37YJp4o9B6XWV1jkUMmr4yQbuzjG0oC0xeG6kihEGOsoklSrwURnmXYadteirjTtbhEgD1dyp3oC6PLcBpJH6PD9mlJ13erhOdZrLl8x8u884bfza9QB3PzNhsaPto6KKMSTyESpzZHX6ijEXJmmtJdFMY/tGijK4sjTZKAkDrM+GYq4Raqw3a6GZiTsdG8AneIJdD2sk9AfdfjKkX8qUOiAwT4/gs7P7U4VbnGoGJuTrAyNZy1BzpM9xGt6JkLUdgqvENm3FCdDDcaTj04rzyVrzZGkdbBu98tC9nbrxnKi5/x81XBztpujOr5xACdIQLuDUSGGOZChnHE5GWOkS8WzCh0qZkvGvbbUNJZwWtdkbAvVYLLg5DYoT+LfvCwOAu64RGigi0KNtt9u16waofoIywE/YIckQ0N1yfWI453HT5pbO8UznCaBHddK6bbzl5UkQQ1uSUC9RlOD1UlOe6wk7AgV6g6gHZLhOch5SU+jgi4SWzLWNa4UBJiIyZkMs70M2c8sk4garE4grqVxElcif2+75UclEcf0vg5BhAd1ohcQ+v0bw1dq5y+/4hhDKAf4ot1Drl1cGsVMSqR/m3T4J0PhFMSoxppTRk7rLqe7pTjaNPyVKfpb272vJFYibPem8Td+BSkIbX5j+Cq/8TtPYa993uACmugYkGpNrkecaCdh2UlaPrMsRSSYbDOxpb7BlprGTh+epSn8O5cn8qFrt0RojAf5ihPe/zW6vs9XaCgzVo1Y8etqnXy+qc6N/Ay8hR2IEMuEydxfENmMZpSS7KNXLq41fI+dUXCFtWSad0VxmKWxEGF1EtVgS0xjp2n4U61Kl8ZpojdB0pfzRCI8/nokrhfHGYp4RvP3ULnPbK4X1zYwgnY1qqjKr9AchVX4MLv2tWGr6iLTNWrliMVHdHLbiW5d7e8OIH6tWDYzogu7uXQmEsflcptiX1xLrEttWn+L60jomUwsz4maLM8pr8/A5TwBgA6BdqMIqzWCttd70Ke17rpail/p6dJPenv4yhF2JGhg2YiVY3q59QKdoT9uqfNUb6p1o/0BBQE1AAAdD226sYSTGPouoKJvAwrljL4zi7BH3h2x6i+x3v9K8apjPJhibMakC/8OqA/v8rsG9nRpKleK5igVAAAARJiRqOe0t9evoMMaqXMTtLyLShOehuv5oatX8GCFMQ0Xf/6cz+uUG7i5HJqGCwAAtF+0GR+hsX+Im64HAirVKa5yKfTxJy9d80wqM2fS+8U/8zP0Bx6XM7q7NbWrqpkz3oCPEAAARZhWaJwQD3Lz97Cm1KuYVfgInTr3svd2pOPdT19W8RYP3jKm6j+mk7JDAc91eQrN+5FbQ16YqAEAAEWYakVYqynoh4BCA4x8ywnwj/zQ/Icvfq/VbVRj8Sad4d9zRXZqF7eu5omF20ERAgCgCJMCo1oe1Qzfn9LIK/zHbsImz7xwzReZFMdHLnnvdR68biznWaOR+TyuV3IyzM7nhKhC4woAAETYUnCFZZAfqtOJucB7FqEZv8D7Axe9v48H1xsLvHPzfeq+RtdkHu+T8l06htZmAABM45hN4wZK0NGAogUY/qdC2APTfvLhG205M+d+fMn5nNSfUBAbxFWix6dSMI0BAFCE9qjXCarVlVrK0BoFo0lTL1i7pz1k5vQL1m7gwQXzPrk4r1YnT9RR8l8+QvNzYAkAAAAUoXG9sRS60QDSoJPvucp5kRPDvRPP+8jf3jP4qQ0XTeF5cJeHsN45io648gVFCAB0NCI0/H+cACk3f3fyIzPHnrv+pY6Y0Qs3XjiU59dcFaMB2aruchEKRAgAZAhSNtZYEKC/ViPr+c9zx5277tSOSoIGxp+7bs2E89YVcRLrX6eRd2o0tTaQ2bPflIrv3nH8iZIz5X1bwiGxAZILY+Lcze2SCLUgAdY1ULKcq5nC2wd/fOHtg9dvgb95EGMGr98z5tz1o7ii696okxeO6cqRACWQMZkLYwq3AhSerTpVMGaXHtuO8mx1DNc5rUmddiStscRQgI2U1HDT+C2C0YSpb891KRjPPfFh7CMKuXvPPefvhTqFUJ85n+ZRymbet4L2YZRNmXvVtDEBimcHmDLaTWhXvkEmZRZKRGUtsOynAgYJzmgneVYU40ejPFMinLAUMQlQVw5xJTiPq5zOE//nkWl8W0op3aeqZIyiKDdzY2p370c+/aTv3E1FHbU29X18c59+czcu53blPoWQyaqi/Iwy9q873ypbf+ebZX+9ZdAn3ShDUxt0Zb/W9hViiTB5mAibUzql4rpFlnuKxG9plsZijpeKaxmKvn5HS4iwAtmv0RuLS6E5dwKzmIqsGRJpjbyVCs+4f2cz77SuFcOaUYZO7hcrjKUHloh47oyxHDCL2S3jUJASIjQaQwJUOcTDORizbhNenT1/3KuzV3OVU+XzuEbmet0eVSFI4fJQcSkuoirn89s+7fvY5s/7zvvsqg6jAOdvPbvvE5+tRwh/zTPjCuxSfcbMDZjnTZbH5crxuM5liG3qdM/7W8YvmfPJDWdv6M414RQ/VfbrLCMIsThii4U4loivfX8RxmL2GZWzWtyDLL6jc8Qz5qDosyOXiEpyvbinBCXuy5RmcYVFFabCPJZpLhP7FRmWt3KJAus7i6KovDJLuq5PMG8kiQ0TinlOjC4EqbDPsZBp8ojQaDHm6q+WE+CzGLETxr4468nxLzxcgSj62uvzXJqb7fG4VMVs3jTbPjGv9FhM2eJSFKYqZ/Ljy/rO37azz1Pbx7RXAuy94PORPH1/5xmxmSnkAr65KSGidRiboZE/mB/LyfKoOVnuQfzQ+s7TVm8b9/LsD34+cGN3rhDv5urwsN66jSqrI7ZYFNFSFF6opxyFF1FqDjMi/EbjxO8ZFmKK9t5yce8WZL+yWUuIsBKFp+2vThERVloIpzID83aL5Z1Lm7m+GoWn+K9Eia3pUiJIbJyIw9I40mstC0ub+7vFRYSc/DSuVt7m1bL76MUzp/968UNL+cFdJNt7mYdLQEMBmv09jLpu/BP9PcwuNiI0SBEr/D+CC/n+n/o88/nePgu/eKBP+ZftosWgd/mXo3sv/McOntzliJABXAUSc/IFkS9mPmBshsbHQY40ITzvsn0e4snJGogZ29TtrhXrxz7/8Ov8dBdOmE/zj08ja51u2Thii8U/tMWmIhXG8c6WVJ4ii6klTdHCBNMuK6J8ZkGM5nEqfW+tkbcFEeZpulAY8aGIJ73V8aQ5psYSUQq+5cGoK8/8bFvBxHfnKkifwPKycrDXxSszkVOtBCs1D2mw9psEwCxhkAyC55g59gz34P89yPcm91781etcIU2tuv20hrZEfn2f/5rwD8K9jNIJfOuJBdmZuRZk/+CYQqEEQ/s8NMlN5Bs1+goa7oRcn0oD2gWkpv7r28sfelPDaPQr4343mytEoyX+rAwfpVJpYzYVodQs4xhZ8OXymslyCRQK026L5dgiEVZ0oLxdYjGlK2Pw6yVbKRda9lOS3lhV2OLhP97a67qnHuySN+bNvdjjupt2yc1hHhciprgT42eRID8HNWiqSjnu1hoGa3ZnwtAEHh7gxLK07wv/1zXTCbDfSzu8hS/ueJpH/wD/OZPzWE9BdZb0yQ9CcF/mh1SHVlVo7MgPCXEpSMvP9lKf50Yc0PfdtOAPV11x5mdn89N3M4YzuWm5zOKfKxRhCUp9i6g0hQsj1EQiRCh9Y5UxmoXIQppzUHgx+ViJvKiZeLdW3hZZVFVpjGmxfkxaCpn30idZIray1iDCsp89/uCE7NFvvMvr50rcrVMPlu0JVlbc1ICSx6hFBcrKjcVvqQzlNaFJGHBw4yoplyum6/jhPYUv76gofKXyxEyr6YV/rfTxeHGzFR9gjN1BGetijqYRJq8cbcOsvwUJIku+hMxlcS3B8gMS/IqYgpkrbtYlL5+b2eU5//2/W6+d/9BifvJGFFyxNBNRLnw6JcKMKhGqammK3zsDhR35O1F0h36sZvFSmwq+tBnzuELExSDlzeKeLTHGv1jcU5BheTtO5OVmizoraIbAjHxYnQQ/7TARbhYfl3EoBd1umh1ilz36zV5E0zayzjndSY4XqYbD36i0JFhxVSIrcPCYIkxeYfZaTWAzJKLhhMkGFAspGESCxVQtWOxjVanl/1+58+Z+H2YECb66qxeP3mdUp12RTs1haqYRbK41ysw1R808ZeHfpglsWMOUBq1lM+THxT1GiMV9mnEt3+fkam6asS/P1Tci/WBNDc+TkbV/vubjRNMCQ+wAgBgVIa73b6c/6mSSIBEKxuoLdFKD0hcoTcJY1CAJrQEirjfO6zSbB8v7v7qrc2tn1imv7eZRw5s4kXU1CdCi6mR67VQhteSHnSoMXROaoqupKpT5TLxupHTPz0WNgTVZd64ogOILAKSLCF1KAfaE21SCQk6YvNKcs/gGBS+GGgaoqPxW36D1WaaSFFMMWE3JcASxoZCy+ZULWjuzeLzGcwI8wRBSCsJhX5/F7xf0l0rij/CFiuusvkImMix4HocJUD7LQpjmvtEy7/N4+bmTofgCAMlBs63GvOIHDDqUpGd16DdRgyjs/JddRIi1NSSkFEUfupA6Cj8DoTBJIPk8se4H/++8DCDCUUgoQaO91yBEgsPkL03NEMGFWC7ceCxbjbFFXWOrKg6m1Zy2TN5vzEZjHhPvM01njPdD8QUA0qUIKasJk5SdGkQhkmMIO6pBq3Kymsx2alCanESazsGn5rR2ZvEo5UnVa8TLThXKfIimCikOd0xrwpe4acu7bJGXJ0OqMKAF6uaN+AaKLwCQJiJEhHyJGzV7NSjYIeTXsqhBq2+QWPxiIeJE9r5BZFGD8lymTO+MJfGJeB1H3CJ9oXM2vkJm8ZdKomQRvkISkW4S6l6DzMYXvn0HRRcASCcRepRZrPpYEzUYVijCVLNRg9L0tXYdiSRJhFBMajBThpwwKyGK+CkWlo6mCkNegAhVSEPD7aznI1VhWIXrR2oRdquvQNEFANJIhMeeu3YFCuhVzK+F1UlEB+BINdiU1OzVYPDlOKoalOzBEG7aytKaGYZtVCFuet5OFaII4rdThdb8s1OFWKeIHmswus/cD0UXAEinIjQuynJfq313OEAYi6oGJdnJriF2atBKdqFuNBFqMKS8BNFm0kTOdqowrPxwVFXYJK02qtA6GQOzUYX+/Ycp/1v85uiiURoUXQAgzUR4pPzqrcTrmhbYV60brZqRahBb/WFR1GC4ARlHVYMKCrcoM0EEmQCME1eF8kPBjhtxYz8Zg2xV939/1JiY4eWjC0e9AMUWAGgFIjTJcNHVT2KXUtq4r1ozun9Y1SCLHDbmoAatHaijqUGGM1MNHkeMCapCqx/VVhWKD0bgwBHGKH25euGo26DIAgCtSIQGDi346ePEpY7y76s+ShsCllEQ9mpQqqJoarCJ2emgBjNlIFhoIhmrio1BFSJkrwpRRMNRpCpEmo4C31XX8xN3/vDMVb+E4goAZAARGvj+qStWKF53D+1w7Rr/DzWaMQ42Ug0iqXYchtNRi6lLMG6TalCSG0Ghfo6OqtCaXidVKPtiBjtmIxQ4XEu1H2q2Y4/rtP3zRz4FRRUASB1atHjTvnnD63hQ3Gv6mrP9Pxx9FrnUQWp+tou4g4+jVv+WDKW/0FgDGck5CcOnpRqkIdWFj1NhmaEKsbmusBxVEmw/EpMqSPJmYZIPjkkOnmCC5TC2JAwF1yk27ta5AvQfraOowf+1Qsj0f/9xxDIoogBAhhKhxJ65Q7fy4Pye963t13C4tpyqyoXePJ9XNaaOkkPqsKUPiM1wutDMMyjcgZqF9jPHLA4Rtp0qZHIUTdNhdwYJMjEyJBiyJsPu5G9dp6j+aF2A+rVtbkIm759bvAGKJgDQRohQYu+sS3bxYFi3B9d1rq2pW4BryZW+vKxc1eu2UYOWMWc2alBM8h9qRLCqw0xhQ2PdFidVaKYDs+iqUJzU/RpqPNbQwJXgOkLwhOpZl+6AIgkAtFEilPj+wQuNNQ1u7DrrE29jvf9Rf73/ZrfP21nxuaOqQWZVgzgz1aCEOaV+HKoQ2ahC1qghra7hmK6zvyGFjD90308OQVEEANoJEUocvO8nxpojvzG2HnM33YuPaJMUr6sHy/Iga3MxDpGLsxq0mqWZqgqD9IZtVWGTKcX8AUTrGg/xa17FijLtQOk5DVAEAYB2SoRW7Js+eDYPZvee99loUlN/H/KohdjnwZFTbTmpQRaapypzVSExfZxB1jtuii7jWGOAq8DAd/zMAqQqs76962wKRQ8A6EBEKPHNlEF/4cFf+j69fTg71vA4cqlnYK+bYBs1aEc8GWcm26jCYPxZcDIGoxHEH2DIr+3mBx7efedZz0FxAwA6OBFK7J40cBUPBvRd+I+zaIN/AVJIEfG63NJ5KNVgqJGk6eQubUAVciL0a1TT9a/4z+lVEwcsh2IGAAAR2hPi+B9v48EFfRf/sw/1a89igi9hbtWnIOU4whE4lgH5ddxC0aF+hdQkwACj9DN+eELVr8/YCsULAAAijI0Qx/xHFQ+u7Pf813ksQJ/RdHq14lLzmLlovCCbYP+UlzMgv57hUbkSWxdnMabN1/R6HsmPMMZjd40+rQqKFQDQttDscp44zTO/9Htph8rfOZdh/EuF4C48PMaj8NcdN/QdnwkZdvLrVVM5Nd/Psy2Pk18tJ8J3uBacVHlL/zbXBQaW8wQAYiRCAAAAaO8gkAUAAACIEAAAAIAIAQAAAIgQAAAAgAgBAAAAiBAAAACACAEAAACIEAAAAIAIAQAAoKPi/wUYAN975gn01rI5AAAAAElFTkSuQmCC"/>
+
+      <div class="wrap">
+         <input class="sub negative float right" value='Logout' name='LOG_OUT' type='submit' onclick="onLogout(this)">
+         <input class="sub positive float right" value='Password' name='UPDATE_PASSWORD' type='submit' onclick="onUpdatePassword(this)">
+         <input class="sub negative1 float right" value='Reboot' name='REBOOT' type='submit' onclick="onReboot(this)">
+         
+         <ul class="tabs group">
+            <li><a class="tablinks active" href="#" onclick="tabsOnclick(event, 'nvr-mic-container')">Microphones</a></li>
+            <li><a class="tablinks" href="#" onclick="tabsOnclick(event, 'nvr-settings-container')">Broker Configuration</a></li>
+         </ul>
+            
+         <div id="nvr-settings-container" class="container" style="display: none">
+            <h1><strong>HOMA VOICE SERVICE SETTING</strong></h1>
+            <form name="vpu_form" action='/setting_form_handler' method='post'>
+               <!-- <div class="row">
+                  <div class="col15">
+                     <div class="title">IP Config</div>
+                  </div>
+                  <div class="col85">
+                     <select name='IP_CONFIG' value="DHCP" style='width: 100%;height: 40px; border: 1px solid #ccc; border-radius: 5px'>
+                        <option  value="DHCP">DHCP</option>
+                        <option  value="STATIC">STATIC</option>
+                     </select>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col15">
+                     <div class="title">IP Address</div>
+                  </div>
+                  <div class="col85">
+                     <input name='IP_ADDRESS' type='text' placeholder="192.168.1.10" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$">
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col15">
+                     <div class="title">Net Mask</div>
+                  </div>
+                  <div class="col85">
+                     <input name='NET_MASK' type='text' placeholder="255.255.255.0" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$">
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col15">
+                     <div class="title">Gateway</div>
+                  </div>
+                  <div class="col85">
+                     <input name='GATEWAY' type='text' placeholder="192.168.1.1" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$">
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col15">
+                     <div class="title">NVR Mac</div>
+                  </div>
+                  <div class="col85">
+                     <input name='NVR_MAC' type='text' placeholder="00:04:4b:e4:01:82" pattern="^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$" readonly="readonly">
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col15">
+                     <div class="title">Streaming IP</div>
+                  </div>
+                  <div class="col85">
+                     <input name='STREAMING_IP' type='text' placeholder="192.168.1.10" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$">
+                  </div>
+               </div> -->
+               <div class="row">
+                  <div class="col15">
+                     <div class="title">Broker IP</div>
+                  </div>
+                  <div class="col85">
+                     <input name='BROKER_IP' type='text' placeholder="192.168.10.77" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$">
+                  </div>
+               </div>
+                <div class="row">
+                 <div class="col15">
+                    <div class="title">Broker Password</div>
+                 </div>
+                 <div class="col85">
+                  <div class="form-group pass_show"> 
+                    <input id='broker_password' name='BROKER_PASSWORD' type='password' placeholder="homa" class='form-control' > 
+                    <span class="ptxt" onclick="onShowPassBroker(this)">Show</span>
+                  </div> 
+                 </div>
+               </div>
+               <div class="row">
+                  <div class="col15">
+                     <div class="title">Broker Status</div>
+                  </div>
+                  <div class="col85">
+                     <input name='BROKER_STATUS' type='text' placeholder="UNKNOWN" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$" readonly="readonly">
+                  </div>
+               </div>
+               <!-- <div class="row">
+                  <div class="col15">
+                     <div class="title">RTSP Port</div>
+                  </div>
+                  <div class="col85">
+                     <input name='RTSP_PORT' type='number' placeholder="8112" min="1" max="65535" maxlength="5">
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col15">
+                     <div class="title">HTTP Port</div>
+                  </div>
+                  <div class="col85">
+                     <input name='HTTP_PORT' type='number' placeholder="8012" min="1" max="65535" maxlength="5">
+                  </div>
+               </div>
+              <div class="row">
+                  <div class="col15">
+                     <div class="title">Audio Port</div>
+                  </div>
+                  <div class="col85">
+                     <input name='AUDIO_PORT' type='number' placeholder="8002" min="1" max="65535" maxlength="5">
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col15">
+                     <div class="title">Time zone</div>
+                  </div>
+                  <div class="col85">
+                     <input name='TIME_ZONE' type='number' placeholder="25200" min="-54000" max="54000">
+                  </div>
+               </div> -->
+               <div class="row">
+                  <input class="sub float right" value='Apply' name='SET' type='submit'>
+               </div>
+            </form>
+         </div>
+         <div id="nvr-mic-container" class="container" style="display: block">
+            <table id='tb-mics-list' class="tb-mics-list">
+               <thead>
+                  <tr>
+                     <th class="tb-col-name">Name</th>
+                     <th class="tb-col-ip">Ip</th>
+                     <th class="tb-col-port">Port</th>
+                     <th class="tb-col-other"></th>
+                  </tr>
+               </thead>
+               <tbody>
+<tr>
+  <td id=cam-name0>recept</td>
+  <td id=cam-ip0>192.168.10.203</td>
+  <td id=cam-port0>8203</td>
+  <td style="display:none;" id=cam-username0>admin</td>
+  <td style="display:none;" id=cam-password0>Homa235mk</td>
+  <td style="display:none;" id=cam-mountpoint0>live/video_audio/profile1</td>
+  <td style="display:none;" id=cam-id0>00000000-0000-4410-8000-910000043000</td>
+  <td style="display:none;" id=cam-index0>0</td>
+  <td>
+    <input class="sub float right negative" value="Delete" type="submit" onclick="onRemoveRow(this,0)">
+    <input class="sub float right" value="Edit" type="submit" onclick="onEditCamera(this,0)">
+  </td>
+</tr>
+               </tbody>
+               <tfoot>
+                  <tr>
+                     <td colspan="4" style="padding: 20px">
+                        <input class="sub float_left" value="Add New" type="submit" onclick="onAddNewMic()">
+                     </td>
+                  </tr>
+               </tfoot>
+            </table>
+         </div>
+      </div>
+      <div id="nvr-new-mic-container" class="nvr-add-new-container" style="display: none">
+         <div class="nvr-add-new-container-sub">
+            <div id="add-edit-mic-title" class="row title">Add Microphone</div>
+            <div class="row">
+               <div class="col50 float left">
+                  <div>Username</div>
+                  <div>
+                     <input id="mic-username" type="text" value="" placeholder="admin">
+                  </div>
+               </div>
+               <div class="col50 float right">
+                  <div>Password</div>
+                  <div class="form-group pass_show"> 
+                     <input id="mic-password" type="password" value="" placeholder="password" class='form-control' maxlength="30">
+                     <span class="ptxt" onclick="onShowPassMic(this)">Show</span>
+                  </div>
+               </div>
+            </div>
+            <div class="row">
+               <div class="col50 float left">
+                  <div>Ip</div>
+                  <div>
+                     <input id="mic-ip" type="text" value="" placeholder="192.168.1.1" required="required" pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$">
+                  </div>
+               </div>
+               <div class="col50 float right">
+                  <div>Port</div>
+                  <div>
+                     <input id="mic-port" type="number" value="" placeholder="1234" required="required" min="1" max="65535" maxlength="5">
+                  </div>
+               </div>
+            </div>
+            <div class="row">
+               <div class="col50 float left">
+                  <div>Mac Address</div>
+                  <div>
+                     <input id="mic-macaddr" type="text" value="" placeholder="00-00-00-00-00-00" required="required" pattern="^([0-9A-Fa-f]{2}[-]){5}([0-9A-Fa-f]{2})$"> 
+                  </div>
+               </div>
+               <div class="col50 float right">
+                  <div>Mic name</div>
+                  <div>
+                     <input id="mic-name" type="text" value="" placeholder="mic-1" maxlength="30"  minlength="1" required="required">
+                  </div>
+               </div>
+            </div>
+            <div style="display:none;" class="row">
+               <div class="col50 float left">
+                  <div>Id</div>
+                  <div>
+                     <input type="hidden" id="mic-id" type="text" value="" placeholder="id">
+                  </div>
+               </div>
+            </div>
+            <div style="display:none;" class="row">
+               <div class="col50 float left">
+                  <div>Id</div>
+                  <div>
+                     <input type="hidden" id="mic-index" type="text" value="" placeholder="index">
+                  </div>
+               </div>
+            </div>
+            <div class="row">
+               <input type='submit' id='update-mic-button' value='Update' name='NEWMIC' onclick="onUpdateMic(this)" style="width: 100%; margin-top: 20px">
+            </div>
+         </div>
+      </div>
+
+
+      <script type="text/javascript">
+         // Handle document keydown event
+         document.onkeydown = function(evt) {
+            var addNewContainer = document.getElementById("nvr-new-mic-container");
+            evt = evt || window.event;
+            var isEscape = false;
+            if ("key" in evt) {
+               isEscape = (evt.key === "Escape" || evt.key === "Esc");
+            } else {
+               isEscape = (evt.keyCode === 27);
+            }
+            if (isEscape) {
+               if(addNewContainer) {
+                  addNewContainer.style.display="none";
+               }               
+            }
+         };
+
+         function onUpdateMic(event)
+         {
+            if (document.getElementById('mic-username').checkValidity()
+              && document.getElementById('mic-password').checkValidity()
+              && document.getElementById('mic-ip').checkValidity()
+              && document.getElementById('mic-port').checkValidity()
+              && document.getElementById('mic-macaddr').checkValidity()
+              && document.getElementById('mic-name').checkValidity())
+            {
+              var form = document.createElement('form');
+              form.setAttribute('method', 'post');
+              form.setAttribute('action', 'update');
+              form.style.display = 'hidden';
+              
+              input = document.createElement('input');
+              input.setAttribute('name', 'mic-username');
+              input.setAttribute('value', document.getElementById('mic-username').value);
+              form.appendChild(input);
+
+              input = document.createElement('input');
+              input.setAttribute('name', 'mic-password');
+              input.setAttribute('value', document.getElementById('mic-password').value);
+              form.appendChild(input);
+
+              input = document.createElement('input');
+              input.setAttribute('name', 'mic-ip');
+              input.setAttribute('value', document.getElementById('mic-ip').value);
+              form.appendChild(input);
+
+              input = document.createElement('input');
+              input.setAttribute('name', 'mic-port');
+              input.setAttribute('value', document.getElementById('mic-port').value);
+              form.appendChild(input);
+
+              input = document.createElement('input');
+              input.setAttribute('name', 'mic-macaddr');
+              input.setAttribute('value', document.getElementById('mic-macaddr').value);
+              form.appendChild(input);
+
+              input = document.createElement('input');
+              input.setAttribute('name', 'mic-id');
+              input.setAttribute('value', document.getElementById('mic-id').value);
+              form.appendChild(input);
+
+              input = document.createElement('input');
+              input.setAttribute('name', 'mic-name');
+              input.setAttribute('value', document.getElementById('mic-name').value);
+              form.appendChild(input);
+
+              input = document.createElement('input');
+              input.setAttribute('name', 'mic-index');
+              input.setAttribute('value', document.getElementById('mic-index').value);
+              form.appendChild(input);
+
+              button = document.getElementById('update-mic-button')
+              button.style.display = 'none';
+              
+              document.body.appendChild(form);
+              form.submit();
+            }
+         }
+
+         // Handle tab item click event
+         function tabsOnclick(event, id) {
+            var tabs = document.getElementsByClassName('container');
+            var tablinks = document.getElementsByClassName("tablinks");
+            console.log('debug', id);
+            for(var i=0; i<tabs.length; i++) {
+               tabs[i].style.display = "none";
+            }
+            for (i = 0; i < tablinks.length; i++) {
+               tablinks[i].className = tablinks[i].className.replace("active", "");
+            }
+            document.getElementById(id).style.display = "block";
+            event.currentTarget.className += " active";
+         }
+
+         // Handle [Add New] camera button
+         function onAddNewMic() {
+            var addNewContainer = document.getElementById("nvr-new-mic-container");
+            addNewContainer.style.display="block";
+
+            var title = document.getElementById('add-edit-mic-title');
+            title.innerHTML = "Add Mic";
+
+            // Clear pre-input content
+            // document.getElementById('mic-username').value='admin';
+            // document.getElementById('mic-password').value='';
+            // document.getElementById('mic-ip').value='192.168.1.1';
+            // document.getElementById('mic-port').value='1234';
+            // document.getElementById('mic-macaddr').value='00-00-00-00-00-00';
+            // document.getElementById('mic-name').value='mic-abc';
+         }
+
+         function onLogout(elem)
+         {
+            var form = document.createElement('form');
+            form.setAttribute('method', 'post');
+            form.setAttribute('action', 'log_out');
+            form.style.display = 'hidden';
+
+            input = document.createElement('input');
+            input.setAttribute('name', 'LOG_OUT');
+            input.setAttribute('value', 'Logout');
+            form.appendChild(input);
+
+            document.body.appendChild(form);
+            form.submit();
+         }
+
+
+          function onReboot(elem)
+         {
+            var form = document.createElement('form');
+            form.setAttribute('method', 'post');
+            form.setAttribute('action', 'reboot');
+            form.style.display = 'hidden';
+
+            input = document.createElement('input');
+            input.setAttribute('name', 'REBOOT');
+            input.setAttribute('value', 'Reboot');
+            form.appendChild(input);
+
+            document.body.appendChild(form);
+            form.submit();
+         }
+
+          function onFactoryReset(elem)
+         {
+            var form = document.createElement('form');
+            form.setAttribute('method', 'post');
+            form.setAttribute('action', 'factory_reset');
+            form.style.display = 'hidden';
+
+            input = document.createElement('input');
+            input.setAttribute('name', 'FACTORY_RESET');
+            input.setAttribute('value', 'Factory_reset');
+            form.appendChild(input);
+
+            document.body.appendChild(form);
+            form.submit();
+         }
+
+          function onUpdatePassword(elem)
+         {
+            var form = document.createElement('form');
+            form.setAttribute('method', 'post');
+            form.setAttribute('action', 'update_password');
+            form.style.display = 'hidden';
+
+            input = document.createElement('input');
+            input.setAttribute('name', 'UPDATE_PASSWORD');
+            input.setAttribute('value', 'Update_password');
+            form.appendChild(input);
+
+            document.body.appendChild(form);
+            form.submit();
+         }
+
+         // Handle [Edit] camera button
+         function onEditMic(elem, index) 
+         {
+            var addNewContainer = document.getElementById("nvr-new-mic-container");
+            addNewContainer.style.display="block";
+
+            var mic_name  = document.getElementById(`mic-name${index}`).innerHTML;
+            var mic_ip    = document.getElementById(`mic-ip${index}`).innerHTML;
+            var mic_port  = document.getElementById(`mic-port${index}`).innerHTML;
+            var mic_user  = document.getElementById(`mic-username${index}`).innerHTML;
+            var mic_pass  = document.getElementById(`mic-password${index}`).innerHTML;
+            var mic_macaddr = document.getElementById(`mic-macaddr${index}`).innerHTML;
+            var mic_id = document.getElementById(`mic-id${index}`).innerHTML;
+            var mic_index = document.getElementById(`mic-index${index}`).innerHTML;
+
+            document.getElementById('mic-username').value = mic_user;
+            document.getElementById('mic-password').value = mic_pass;
+            document.getElementById('mic-name').value     = mic_name;
+            document.getElementById('mic-ip').value       = mic_ip;
+            document.getElementById('mic-port').value     = mic_port;
+            document.getElementById('mic-macaddr').value  = mic_macaddr;
+            document.getElementById('mic-id').value  = mic_id;
+            document.getElementById('mic-index').value  = mic_index;
+            document.getElementById('add-edit-mic-title').innerHTML = `Edit [ ${mic_name} ]`;
+         }
+
+         function onRemoveRow(elem, index) 
+         {
+
+            var form = document.createElement('form');
+            form.setAttribute('method', 'post');
+            form.setAttribute('action', 'delete');
+            // form.setAttribute('mic-index', index);
+            form.style.display = 'hidden';
+            
+            input = document.createElement('input');
+            input.setAttribute('name', 'mic-index');
+            input.setAttribute('value', index);
+            input.setAttribute('type', 'hidden');
+            form.appendChild(input);
+
+            button = document.getElementById(`delete-mic-button${index}`)
+            button.style.display = 'none';
+            
+            document.body.appendChild(form);
+            form.submit();
+
+         }
+
+         function onShowPassMic(elem)
+         {
+            var x = document.getElementById("mic-password");
+            if (x.type === "password") {
+              x.type = "text";
+            } else {
+              x.type = "password";
+            }
+         }
+
+         function onShowPassBroker(elem)
+         {
+            var x = document.getElementById("broker_password");
+            if (x.type === "password") {
+              x.type = "text";
+            } else {
+              x.type = "password";
+            }
+         }
+
+        </script>
+   </body>
+   
+</html>
+
